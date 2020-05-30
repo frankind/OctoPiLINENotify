@@ -1,0 +1,263 @@
+[
+    {
+        "id": "fad31815.3f8408",
+        "type": "function",
+        "z": "4f2761af.ccd75",
+        "name": "Preparing data to call linenotify with file",
+        "func": "const TOKEN = '2cYsDdlcTMFjamcDOpN9uCVM2dnaNXddBpbCOQbucVF'\nconst LINEURL = 'https://notify-api.line.me/api/notify'\nconst input = msg.payload[1]\nconst message = msg.payload[0].message\nconst myFile = input\nmsg = {}\nmsg.url = LINEURL\nmsg.headers = {\n  'content-type': 'multipart/form-data',\n  Authorization: 'Bearer ' + TOKEN\n}\nmsg.payload = {\n    message: message,\n    imageFile: {\n        value: input,\n        options: {\n            filename: \"full.jpg\"\n        }\n    }\n}\nreturn msg\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1320,
+        "y": 380,
+        "wires": [
+            [
+                "f04e25fc.d4c078"
+            ]
+        ]
+    },
+    {
+        "id": "f04e25fc.d4c078",
+        "type": "http request",
+        "z": "4f2761af.ccd75",
+        "name": "Call LINE Notify",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 1640,
+        "y": 380,
+        "wires": [
+            [
+                "87ffeb07.14e228"
+            ]
+        ]
+    },
+    {
+        "id": "87ffeb07.14e228",
+        "type": "debug",
+        "z": "4f2761af.ccd75",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 1790,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "3effee9.b827d12",
+        "type": "file in",
+        "z": "4f2761af.ccd75",
+        "name": "",
+        "filename": "/home/pi/myimage/snapshot/full.jpg",
+        "format": "",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 750,
+        "y": 260,
+        "wires": [
+            [
+                "344a26b9.0e8aea"
+            ]
+        ]
+    },
+    {
+        "id": "3422ab61.31d654",
+        "type": "http request",
+        "z": "4f2761af.ccd75",
+        "name": "Get Image from WebCam",
+        "method": "GET",
+        "ret": "bin",
+        "paytoqs": false,
+        "url": "http://192.168.1.140:4740/shot.jpg",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 610,
+        "y": 140,
+        "wires": [
+            [
+                "680474c0.2a713c"
+            ]
+        ]
+    },
+    {
+        "id": "680474c0.2a713c",
+        "type": "file",
+        "z": "4f2761af.ccd75",
+        "name": "",
+        "filename": "myimage/snapshot/full.jpg",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 680,
+        "y": 200,
+        "wires": [
+            [
+                "3effee9.b827d12"
+            ]
+        ]
+    },
+    {
+        "id": "6f0cb9.938bc348",
+        "type": "http in",
+        "z": "4f2761af.ccd75",
+        "name": "/myocto/lineNotify",
+        "url": "/myocto/lineNotify",
+        "method": "post",
+        "upload": true,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 380,
+        "wires": [
+            [
+                "5129b259.86739c",
+                "5897a6e2.4d0eb8"
+            ]
+        ]
+    },
+    {
+        "id": "344a26b9.0e8aea",
+        "type": "join",
+        "z": "4f2761af.ccd75",
+        "name": "Join 2 Payloads",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 980,
+        "y": 380,
+        "wires": [
+            [
+                "fad31815.3f8408",
+                "a5e4fef3.3396c"
+            ]
+        ]
+    },
+    {
+        "id": "490864fb.11a15c",
+        "type": "delay",
+        "z": "4f2761af.ccd75",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "100",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 550,
+        "y": 80,
+        "wires": [
+            [
+                "3422ab61.31d654"
+            ]
+        ]
+    },
+    {
+        "id": "5129b259.86739c",
+        "type": "switch",
+        "z": "4f2761af.ccd75",
+        "name": "Check apiSecret",
+        "property": "payload.apiSecret",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "frankindEnder3Pro",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 320,
+        "y": 380,
+        "wires": [
+            [
+                "490864fb.11a15c",
+                "344a26b9.0e8aea",
+                "3ebd1388.5dad5c"
+            ],
+            [
+                "8da19f2b.72e97"
+            ]
+        ]
+    },
+    {
+        "id": "8da19f2b.72e97",
+        "type": "http response",
+        "z": "4f2761af.ccd75",
+        "name": "Return 409 error",
+        "statusCode": "409",
+        "headers": {},
+        "x": 680,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "a5e4fef3.3396c",
+        "type": "debug",
+        "z": "4f2761af.ccd75",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 1210,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "5897a6e2.4d0eb8",
+        "type": "debug",
+        "z": "4f2761af.ccd75",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 330,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "3ebd1388.5dad5c",
+        "type": "http response",
+        "z": "4f2761af.ccd75",
+        "name": "Return 200 OK",
+        "statusCode": "200",
+        "headers": {},
+        "x": 680,
+        "y": 500,
+        "wires": []
+    }
+]
