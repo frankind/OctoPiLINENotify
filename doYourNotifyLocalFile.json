@@ -4,7 +4,7 @@
       "type": "function",
       "z": "4f2761af.ccd75",
       "name": "Preparing data to call linenotify with file",
-      "func": "const TOKEN = '<your LINE Token'\nconst LINEURL = 'https://notify-api.line.me/api/notify'\nconst input = msg.payload[1]\nconst message = msg.payload[0].message\nconst myFile = input\nmsg = {}\nmsg.url = LINEURL\nmsg.headers = {\n  'content-type': 'multipart/form-data',\n  Authorization: 'Bearer ' + TOKEN\n}\nmsg.payload = {\n    message: message,\n    imageFile: {\n        value: input,\n        options: {\n            filename: \"full.jpg\"\n        }\n    }\n}\nreturn msg\n",
+      "func": "const TOKEN = '<your LINE Token>'\nconst LINEURL = 'https://notify-api.line.me/api/notify'\nconst input = msg.payload[1]\nconst message = msg.payload[0].message\nconst myFile = input\nmsg = {}\nmsg.url = LINEURL\nmsg.headers = {\n  'content-type': 'multipart/form-data',\n  Authorization: 'Bearer ' + TOKEN\n}\nmsg.payload = {\n    message: message,\n    imageFile: {\n        value: input,\n        options: {\n            filename: \"full.jpg\"\n        }\n    }\n}\nreturn msg\n",
       "outputs": 1,
       "noerr": 0,
       "x": 1320,
