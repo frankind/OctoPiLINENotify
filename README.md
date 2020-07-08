@@ -1,3 +1,7 @@
+# Create your LINE Notify
+- https://digitalarea.co/line-notify-beginner/
+- Copy your access token, then paste it in code after you have imported the flow in nodered
+
 # OctoPi do LINENotify with Nodered
 - If you have raspberry PI, so you can use octopi/print to use Nodered to send the printing progress with you webcam snapshot.
 - Normally I use Android device with IP Webcam app (Free with ads)
